@@ -14,14 +14,14 @@ Follow the instructions below to build and run the application at AWS Lambda.
 2. Tag your container for deployment to ECR:
 ```
     docker tag flask-dual-app:latest \
-    <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-dual-app:latest
+    674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-dual-app:latest
 ```
 
 3. Login to ECR
 ```
-    aws ecr get-login-password --region us-east-1 \
+    aws ecr get-login-password --region us-east-2 \
     | docker login --username AWS \
-    --password-stdin <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com
+    --password-stdin 674415394971.dkr.ecr.us-east-2.amazonaws.com
 ```
 
 4. Create a repository at ECR
@@ -30,27 +30,27 @@ Follow the instructions below to build and run the application at AWS Lambda.
     aws ecr create-repository \
     --repository-name flask-dual-app \
     --image-scanning-configuration scanOnPush=true \
-    --region us-east-1
+    --region us-east-2
 ```
 
 5. Push the container image to ECR
 ```
-    docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-dual-app:latest
+    docker push 674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-dual-app:latest
 ```
 
 6. Create the Lambda function
    (note: you'll have to [create an execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) first).
 ```
-    aws lambda --region us-east-1 create-function \
+    aws lambda --region us-east-2 create-function \
     --function-name flask-dual-app \
     --package-type Image \
-    --role arn:aws:iam::<aws-account-id>:role/supernova-execution-role \
-    --code ImageUri=<aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-dual-app:latest
+    --role arn:aws:iam::674415394971:role/lambda-serverless-example-exec-role \
+    --code ImageUri=674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-dual-app:latest
 ```
 
 7. Invoke the Lambda function
 ```
-    aws lambda --region us-east-1 invoke \
+    aws lambda --region us-east-2 invoke \
     --function-name flask-dual-app \
     --invocation-type Event \
     --payload '{ "foo": "bar" }' \

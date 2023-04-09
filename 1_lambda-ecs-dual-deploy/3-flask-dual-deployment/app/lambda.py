@@ -4,8 +4,6 @@
 import json, requests
 
 def handler(event, context):
-  r = requests.get('http://127.0.0.1:8000')
-
     response = {}
     r = requests.get('http://127.0.0.1:8000')
     response['statusCode']=200

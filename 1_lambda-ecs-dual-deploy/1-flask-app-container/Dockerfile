@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT-0
 
 # Define global args
-ARG APPLICATION_DIR="/home/app/"
+ARG APPLICATION_DIR="/home/app"
 ARG RUNTIME_VERSION="3.9"
 ARG DISTRO_VERSION="3.12"
 FROM python:${RUNTIME_VERSION}-alpine${DISTRO_VERSION} AS python-alpine
