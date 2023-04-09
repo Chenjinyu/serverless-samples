@@ -14,14 +14,14 @@ Follow the instructions below to build and run the application.
 2. Tag your container for deployment to ECR:
 ```
     docker tag flask-lambda-container:latest \
-    <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-lambda-container:latest
+    674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-lambda-container:latest
 ```
 
 3. Login to ECR
 ```
-    aws ecr get-login-password --region us-east-1 \
+    aws ecr get-login-password --region us-east-2 \
     | docker login --username AWS \
-    --password-stdin <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com
+    --password-stdin 674415394971.dkr.ecr.us-east-2.amazonaws.com
 ```
 
 4. Create a repository at ECR
@@ -30,27 +30,29 @@ Follow the instructions below to build and run the application.
     aws ecr create-repository \
     --repository-name flask-lambda-container \
     --image-scanning-configuration scanOnPush=true \
-    --region us-east-1
+    --region us-east-2
 ```
 
 5. Push the container image to ECR
 ```
-docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-lambda-container:latest
+docker push 674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-lambda-container:latest
 ```
 
 6. Create the Lambda function
    (note: you'll have to [create an execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) first)
+
+>The Role([lambda-serverless-example-exec-role](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-2#/roles/details/lambda-serverless-example-exec-role?section=permissions))has been created. 
 ```
-    aws lambda --region us-east-1 create-function \
+    aws lambda --region us-east-2 create-function \
     --function-name flask-lambda-container \
     --package-type Image \
-    --role arn:aws:iam::<aws-account-id>:role/supernova-execution-role \
-    --code ImageUri=<aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/flask-lambda-container:latest
+    --role arn:aws:iam::674415394971:role/lambda-serverless-example-exec-role \
+    --code ImageUri=674415394971.dkr.ecr.us-east-2.amazonaws.com/flask-lambda-container:latest
 ```
 
 7. Invoke the Lambda function
 ```
-    aws lambda --region us-east-1 invoke \
+    aws lambda --region us-east-2 invoke \
     --function-name flask-lambda-container \
     --invocation-type Event \
     --payload '{ "foo": "bar" }' \
